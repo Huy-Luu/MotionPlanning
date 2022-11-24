@@ -21,8 +21,10 @@ class PlanExecute:
         position_lat, position_lon, yaw, v = serial_handler.receiveFourInputs()
         x, y = utm.fromLatLon(position_lat, position_lon)
         target_idx, _ = scontroller.calcTargetIndex(vehicle, path, 0)
+        serial_handler.send("w") # run the cart
+        t.sleep(0.1)
 
-        while True: # replace with a flag
+        while last_idx > target_idx:
             serial_handler.send("t")
             position_lat, position_lon, yaw, v = serial_handler.receiveFourInputs()
             x, y = utm.fromLatLon(position_lat, position_lon)
@@ -36,11 +38,13 @@ class PlanExecute:
             client.publish(message, "data/position")
 
             if(target_idx > waypoint_indices[count]):
+                    serial_handler.send("f") # stop when arriving at the waypoint
                     wp_arr_flag = 1
                     wp_no_arrived += 1
                     wp_about_to_arrive += 1
                     message = str(point_to_send.getY()) + "," + str(point_to_send.getX()) + "," + str(wp_arr_flag) + "," + str(wp_no_arrived) + "," + str(wp_about_to_arrive) + "," + "3.0" + "," + "180.0"
                     client.publish(message, "data/position")
                     print("REACHED WAYPOINT")
-                    t.sleep(2)
+                    t.sleep(5)
+                    serial_handler.send("w") # continue running the cart
                     count+=1
