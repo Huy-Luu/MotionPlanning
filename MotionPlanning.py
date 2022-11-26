@@ -29,6 +29,9 @@ while True:
         pass
     client.waypointcame = False
 
+    vehicle.x = 0
+    vehicle.y = 0
+
     # Get the wp into a list
     for i in range(0,len(client.waypointlist)):
         og_points.append(OriginalPoint(client.waypointlist[i]))
@@ -70,6 +73,7 @@ while True:
         utm=utm,
         target_idx=target_idx,
         last_idx=last_idx,
+        og_points=og_points,
         path=path,
         waypoints=waypoints,
         waypoint_indices=waypoint_indices,
