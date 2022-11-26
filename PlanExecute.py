@@ -4,6 +4,7 @@ from SlidingWindow import SlidingWindow
 from MQTTclient import MQTTclient
 from Point import Point
 from SteeringMappingSender import SteeingMappingSender
+import numpy as np
 import time as t
 
 # Check steering mapping, sending data back to serial, check steering command method on old source
@@ -28,6 +29,7 @@ class PlanExecute:
         x, y = utm.fromLatlon(position_lat, position_lon)
         vehicle.x = x
         vehicle.y = y
+        vehicle.yaw = np.radians(yaw)
         target_idx, _ = scontroller.calcTargetIndex(vehicle, path, 0)
         serial_handler.send("w") # run the cart
         t.sleep(0.1)
@@ -38,6 +40,7 @@ class PlanExecute:
             x, y = utm.fromLatlon(position_lat, position_lon)
             vehicle.x = x - offset.x
             vehicle.y = y - offset.y
+            vehicle.yaw = np.radians(yaw)
             di, target_idx = scontroller.stanleyControl(vehicle, path, yaw, target_idx)
             SteeingMappingSender.sendMapped(serial_handler, di)
             f.write(str(position_lat) + "," + str(position_lon) + ","  + str(vehicle.x) + "," + str(vehicle.y) + "," + str(vehicle.v) + "," + str(vehicle.yaw) + ","  + '\r')
