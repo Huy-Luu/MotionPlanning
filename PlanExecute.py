@@ -15,6 +15,7 @@ class PlanExecute:
         wp_arr_flag = 0
         wp_no_arrived = 1
         wp_about_to_arrive = 1
+        f = open("/home/hluu/MotionPlanning/data.txt", 'a')
 
         #First point
         serial_handler.send("t") #request first state
@@ -28,7 +29,10 @@ class PlanExecute:
             serial_handler.send("t")
             position_lat, position_lon, yaw, v = serial_handler.receiveFourInputs()
             x, y = utm.fromLatLon(position_lat, position_lon)
+            vehicle.x = x
+            vechicle.y = y
             di, target_idx = scontroller.stanleyControl(vehicle, path, yaw, target_idx)
+            f.write(str(position_lat) + "," + str(position_lon) + ","  + str(vehicle.x) + "," + str(vehicle.y) + "," + str(vehicle.v) + "," + str(vehicle.yaw) + ","  + '\r')
 
             #update control
             di = scontroller.steeringMapping(di)
