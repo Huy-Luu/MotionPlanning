@@ -21,7 +21,8 @@ class StanleyController:
         angle = math.degrees(angle)
         remains = angle % 10
         angle = angle - remains
-        return math.radians(angle)
+        #return math.radians(angle)
+        return angle
 
     def stanleyControl(self, vehicle, path, yaw, last_target_idx):
 
