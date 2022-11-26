@@ -1,8 +1,9 @@
-from turtle import position
+#from turtle import position
 from StanleyController import StanleyController
 from SlidingWindow import SlidingWindow
 from MQTTclient import MQTTclient
 from Point import Point
+from SteeringMappingSender import SteeingMappingSender
 import time as t
 
 # Check steering mapping, sending data back to serial, check steering command method on old source
@@ -38,6 +39,7 @@ class PlanExecute:
             vehicle.x = x - offset.x
             vehicle.y = y - offset.y
             di, target_idx = scontroller.stanleyControl(vehicle, path, yaw, target_idx)
+            SteeingMappingSender.sendMapped(serial_handler, di)
             f.write(str(position_lat) + "," + str(position_lon) + ","  + str(vehicle.x) + "," + str(vehicle.y) + "," + str(vehicle.v) + "," + str(vehicle.yaw) + ","  + '\r')
 
             #update control
