@@ -1,7 +1,7 @@
 from SlidingWindow import SlidingWindow
 from StanleyController import StanleyController
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from Vehicle import Vehicle
 from UTMmodule import UTMmodule
 from Point import OriginalPoint
@@ -28,6 +28,7 @@ while True:
     while(client.waypointcame == False):
         pass
     client.waypointcame = False
+    print("Received")
 
     vehicle.x = 0
     vehicle.y = 0
@@ -77,6 +78,7 @@ while True:
         path=path,
         waypoints=waypoints,
         waypoint_indices=waypoint_indices,
+        offset=offset,
         yaw=yaw
     )
 

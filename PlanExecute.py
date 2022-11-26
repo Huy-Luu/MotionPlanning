@@ -25,22 +25,22 @@ class PlanExecute:
 
         #First point
         serial_handler.send("t") #request first state
-        position_lat, position_lon, yaw, v = serial_handler.receiveFourInputs()
+        position_lat, position_lon, current_yaw, v = serial_handler.receiveFourInputs()
         x, y = utm.fromLatlon(position_lat, position_lon)
         vehicle.x = x
         vehicle.y = y
-        vehicle.yaw = np.radians(yaw)
+        vehicle.yaw = np.radians(current_yaw)
         target_idx, _ = scontroller.calcTargetIndex(vehicle, path, 0)
         serial_handler.send("w") # run the cart
         t.sleep(0.1)
 
         while last_idx > target_idx:
             serial_handler.send("t")
-            position_lat, position_lon, yaw, v = serial_handler.receiveFourInputs()
+            position_lat, position_lon, current_yaw, v = serial_handler.receiveFourInputs()
             x, y = utm.fromLatlon(position_lat, position_lon)
             vehicle.x = x - offset.x
             vehicle.y = y - offset.y
-            vehicle.yaw = np.radians(yaw)
+            vehicle.yaw = np.radians(current_yaw)
             di, target_idx = scontroller.stanleyControl(vehicle, path, yaw, target_idx)
             SteeingMappingSender.sendMapped(serial_handler, di)
             f.write(str(position_lat) + "," + str(position_lon) + ","  + str(vehicle.x) + "," + str(vehicle.y) + "," + str(vehicle.v) + "," + str(vehicle.yaw) + ","  + '\r')
@@ -57,6 +57,7 @@ class PlanExecute:
                     wp_arr_flag = 1
                     wp_no_arrived += 1
                     wp_about_to_arrive += 1
+                    f.write("Reached Waypoint")
                     message = str(point_to_send.getY()) + "," + str(point_to_send.getX()) + "," + str(wp_arr_flag) + "," + str(wp_no_arrived) + "," + str(wp_about_to_arrive) + "," + "3.0" + "," + "180.0"
                     client.publish(message, "data/position")
                     print("REACHED WAYPOINT")

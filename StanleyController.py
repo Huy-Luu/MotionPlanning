@@ -27,9 +27,15 @@ class StanleyController:
     def stanleyControl(self, vehicle, path, yaw, last_target_idx):
 
         current_target_idx, error_front_axle = self.calcTargetIndex(vehicle, path, last_target_idx)
+        
+        print("Yaw length")
+        print(len(yaw))
 
         if last_target_idx >= current_target_idx:
             current_target_idx = last_target_idx
+
+        print("target_idx")
+        print(current_target_idx)
 
         #print(current_target_idx)
 
