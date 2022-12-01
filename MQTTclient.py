@@ -9,6 +9,8 @@ class MQTTclient:
         self.client_id = client_id
         self.waypointlist = []
         self.waypointcame = False
+        self.pause = False
+        self.go = False # used when paused
 
     def connect(self):
         self.client = mqttclient.Client(self.client_id)
@@ -29,6 +31,10 @@ class MQTTclient:
             elif(info == "EndWaypoint"):
                 #do something to inform that all of them arrived
                 self.waypointcame = True
+            elif(info == "Pause"):
+                self.pause = True
+            elif(info == "Go"):
+                self.go = True
             else:
                 self.waypointlist.append(info)
 

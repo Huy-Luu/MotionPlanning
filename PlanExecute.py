@@ -41,6 +41,7 @@ class PlanExecute:
             position_lat_nmea, position_lon_nmea, current_yaw, v = serial_handler.receiveFourInputs()
             position_lat = utm.nmeaToDec(position_lat_nmea)
             position_lon = utm.nmeaToDec(position_lon_nmea)
+            print(position_lat, position_lon)
             x, y = utm.fromLatlon(position_lat, position_lon)
             vehicle.x = x - offset.x
             vehicle.y = y - offset.y
@@ -56,6 +57,14 @@ class PlanExecute:
             message = str(point_to_send.getY()) + "," + str(point_to_send.getX()) + "," + str(wp_arr_flag) + "," + str(wp_no_arrived) + "," + str(wp_about_to_arrive) + "," + "3.0" + "," + "180.0"
             client.publish(message, "data/position")
             t.sleep(0.5)
+
+            # managing pause and run
+            if client.pause == True:
+                serial_handler.send("f")
+                while client.go == False:
+                    pass
+                serial_handler.send("w")
+                client.pause = client.go = False
 
             if(target_idx > waypoint_indices[count]):
                     serial_handler.send("f") # stop when arriving at the waypoint
