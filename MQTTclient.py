@@ -11,6 +11,7 @@ class MQTTclient:
         self.waypointcame = False
         self.pause = False
         self.go = False # used when paused
+        self.request_current_position = False
 
     def connect(self):
         self.client = mqttclient.Client(self.client_id)
@@ -35,6 +36,9 @@ class MQTTclient:
                 self.pause = True
             elif(info == "Go"):
                 self.go = True
+            elif(info == "Request"):
+                self.request_current_position = True
+
             else:
                 self.waypointlist.append(info)
 

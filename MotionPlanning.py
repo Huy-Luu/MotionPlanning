@@ -26,6 +26,12 @@ og_points = []
 while True:
     # Waiting for incoming waypoints
     while(client.waypointcame == False):
+        if(client.request_current_position == True):
+            serial_handler.send("m")
+            current_lat, current_lon = serial_handler.receiveTwoInputs()
+            message = str(current_lon) + "," + str(current_lat)
+            client.publish(message,"data/position")
+            client.request_current_position = True
         pass
     client.waypointcame = False
     print("Received")
