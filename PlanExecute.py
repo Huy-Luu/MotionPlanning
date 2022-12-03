@@ -17,7 +17,7 @@ class PlanExecute:
         wp_arr_flag = 0
         wp_no_arrived = 1
         wp_about_to_arrive = 1
-        f = open(r"/home/hluu/MotionPlanning/data2.txt", "a")
+        f = open(r"/home/hluu/MotionPlanning/data3-12.txt", "a")
         f.write("Waypoints" + '\r')
         for i in range(0, len(og_points)):
             f.write(str(og_points[i].getLat()) + str(og_points[i].getLon()) + '\r')
@@ -28,6 +28,7 @@ class PlanExecute:
         position_lat_nmea, position_lon_nmea, current_yaw, v = serial_handler.receiveFourInputs()
         position_lat = utm.nmeaToDec(position_lat_nmea)
         position_lon = utm.nmeaToDec(position_lon_nmea)
+        print(str(position_lat) + "," + str(position_lon))
         x, y = utm.fromLatlon(position_lat, position_lon)
         vehicle.x = x
         vehicle.y = y

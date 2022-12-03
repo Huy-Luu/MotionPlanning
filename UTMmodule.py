@@ -245,12 +245,13 @@ class UTMmodule(object):
 
         return int((longitude + 180) / 6) + 1
 
-    def nmeaToDec(deg_coord):
+    def nmeaToDec(self, deg_coord):
         degree = int(deg_coord/100)
         minutes = deg_coord - degree*100
         dec_deg = minutes/60
         decimal = degree + dec_deg
-        return "{:.6f}".format(decimal)
+        return decimal
+        #return "{:.6f}".format(decimal)
 
 
     def zoneNumberToCentralLongitude(self, zone_number):

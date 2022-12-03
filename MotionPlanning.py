@@ -29,9 +29,12 @@ while True:
         if(client.request_current_position == True):
             serial_handler.send("m")
             current_lat, current_lon = serial_handler.receiveTwoInputs()
-            message = str(current_lon) + "," + str(current_lat)
+            lat = utm.nmeaToDec(current_lat)
+            lon = utm.nmeaToDec(current_lon)
+            message = str(lon) + "," + str(lat)
+            print(str(lat) + "," + str(lon))
             client.publish(message,"data/position")
-            client.request_current_position = True
+            client.request_current_position = False
         pass
     client.waypointcame = False
     print("Received")
