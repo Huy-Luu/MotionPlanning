@@ -27,6 +27,7 @@ while True:
     # Waiting for incoming waypoints
     while(client.waypointcame == False):
         if(client.request_current_position == True):
+            print("Taking position")
             serial_handler.send("m")
             current_lat, current_lon = serial_handler.receiveTwoInputs()
             lat = utm.nmeaToDec(current_lat)
