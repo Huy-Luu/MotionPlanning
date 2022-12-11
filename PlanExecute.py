@@ -17,7 +17,7 @@ class PlanExecute:
         wp_arr_flag = 0
         wp_no_arrived = 1
         wp_about_to_arrive = 1
-        f = open(r"/home/hluu/MotionPlanning/data3-12.txt", "a")
+        f = open(r"/home/hluu/MotionPlanning/data10-12.txt", "a")
         f.write("Waypoints" + '\r')
         for i in range(0, len(og_points)):
             f.write(str(og_points[i].getLat()) + str(og_points[i].getLon()) + '\r')
@@ -49,7 +49,7 @@ class PlanExecute:
             vehicle.yaw = np.radians(current_yaw)
             di, target_idx = scontroller.stanleyControl(vehicle, path, yaw, target_idx)
             SteeingMappingSender.sendMapped(serial_handler, di)
-            f.write(str(position_lat) + "," + str(position_lon) + ","  + str(vehicle.x) + "," + str(vehicle.y) + "," + str(vehicle.v) + "," + str(vehicle.yaw) + ","  + '\r')
+            f.write(str(position_lat) + "," + str(position_lon) + ","  + str(vehicle.x) + "," + str(vehicle.y) + "," + str(vehicle.v) + "," + str(vehicle.yaw) + "," + str(di)  + '\r')
 
             #update control
             di = scontroller.steeringMapping(di)
@@ -57,7 +57,7 @@ class PlanExecute:
             point_to_send = Point(position_lat, position_lon)
             message = str(point_to_send.getY()) + "," + str(point_to_send.getX()) + "," + str(wp_arr_flag) + "," + str(wp_no_arrived) + "," + str(wp_about_to_arrive) + "," + "3.0" + "," + "180.0"
             client.publish(message, "data/position")
-            t.sleep(0.3)
+            t.sleep(0.8)
 
             # managing pause and run
             if client.pause == True:
